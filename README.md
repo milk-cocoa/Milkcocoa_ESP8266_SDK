@@ -13,7 +13,7 @@ Milkcocoa milkcocoa = Milkcocoa(&client, MQTT_SERVER, MILKCOCOA_SERVERPORT, MILK
 
 void setup() {
 	//"on" API was able to call in setup
-	milkcocoa->on("datastore name", "push", onpush);
+	milkcocoa.on("datastore name", "push", onpush);
 }
 
 void loop() {
