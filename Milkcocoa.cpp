@@ -48,9 +48,20 @@ char *DataElement::toCharArray() {
   aJson.print(data);
 }
 
-Milkcocoa::Milkcocoa(Client *client, const char *host, const char *_app_id, const char *client_id) {
+Milkcocoa::Milkcocoa(Client *client, const char *host, uint16_t port, const char *_app_id, const char *client_id) {
   app_id = _app_id;
-  mqtt = new Adafruit_MQTT_Client(client, host, 1883, client_id, "sdammy", app_id);
+  mqtt = new Adafruit_MQTT_Client(client, host, port, client_id, "sdammy", app_id);
+
+  for (uint8_t i=0; i<MILKCOCOA_SUBSCRIBERS; i++) {
+    milkcocoaSubscribers[i] = 0;
+  }
+
+}
+
+Milkcocoa::Milkcocoa(Client *client, const char *host, uint16_t port, const char *_app_id, const char *client_id, const char *_session) {
+  app_id = _app_id;
+  sprintf(session, "s%s", _session);
+  mqtt = new Adafruit_MQTT_Client(client, host, port, client_id, session, app_id);
 
   for (uint8_t i=0; i<MILKCOCOA_SUBSCRIBERS; i++) {
     milkcocoaSubscribers[i] = 0;

@@ -37,7 +37,8 @@ class MilkcocoaSubscriber {
 
 class Milkcocoa {
  public:
-  Milkcocoa(Client *client, const char *host, const char *_app_id, const char *client_id);
+  Milkcocoa(Client *client, const char *host, uint16_t port, const char *_app_id, const char *client_id);
+  Milkcocoa(Client *client, const char *host, uint16_t port, const char *_app_id, const char *client_id, const char *_session);
 
   void connect();
   void loop();
@@ -48,6 +49,7 @@ class Milkcocoa {
 
 private:
   const char *app_id;
+  char session[128];
   Adafruit_MQTT_Client *mqtt;
   MilkcocoaSubscriber *milkcocoaSubscribers[MILKCOCOA_SUBSCRIBERS];
 };
