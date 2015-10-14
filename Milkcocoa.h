@@ -30,21 +30,24 @@ class MilkcocoaSubscriber {
 	public:
 		Adafruit_MQTT_Subscribe *mqtt_sub;
 		GeneralFunction cb;
-		MilkcocoaSubscriber(Adafruit_MQTT_Subscribe *_mqtt_sub, GeneralFunction _cb);
+    char topic[100];
+		MilkcocoaSubscriber(GeneralFunction _cb);
+    void set_mqtt_sub(Adafruit_MQTT_Subscribe *_mqtt_sub);
 };
 
 class Milkcocoa {
  public:
-  Milkcocoa(Client *client, const char *host, const char *app_id, const char *client_id);
+  Milkcocoa(Client *client, const char *host, const char *_app_id, const char *client_id);
 
   void connect();
   void loop();
-  bool push(const char *topic, DataElement dataelement);
-  bool send(const char *topic, DataElement dataelement);
-  bool on(const char *topic, GeneralFunction cb);
+  bool push(const char *path, DataElement dataelement);
+  bool send(const char *path, DataElement dataelement);
+  bool on(const char *path, const char *event, GeneralFunction cb);
 
 
 private:
+  const char *app_id;
   Adafruit_MQTT_Client *mqtt;
   MilkcocoaSubscriber *milkcocoaSubscribers[MILKCOCOA_SUBSCRIBERS];
 };

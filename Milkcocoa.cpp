@@ -1,5 +1,5 @@
 #include "Milkcocoa.h"
-
+#include "stdio.h"
 
 
 
@@ -8,7 +8,8 @@ DataElement::DataElement() {
 }
 
 DataElement::DataElement(char *json_string) {
-  params = aJson.parse(json_string);
+  aJsonObject* obj = aJson.parse(json_string);
+  params = aJson.getObjectItem(obj, "params");
 }
 
 void DataElement::setValue(const char *key, const char *v) {
@@ -30,6 +31,8 @@ char *DataElement::getString(const char *key) {
 
 int DataElement::getInt(const char *key) {
   aJsonObject* obj = aJson.getObjectItem(params, key);
+  if(obj == NULL)
+    Serial.println("obj is NULL");
   return obj->valueint;
 }
 
@@ -45,7 +48,8 @@ char *DataElement::toCharArray() {
   aJson.print(data);
 }
 
-Milkcocoa::Milkcocoa(Client *client, const char *host, const char *app_id, const char *client_id) {
+Milkcocoa::Milkcocoa(Client *client, const char *host, const char *_app_id, const char *client_id) {
+  app_id = _app_id;
   mqtt = new Adafruit_MQTT_Client(client, host, 1883, client_id, "sdammy", app_id);
 
   for (uint8_t i=0; i<MILKCOCOA_SUBSCRIBERS; i++) {
@@ -73,30 +77,44 @@ void Milkcocoa::connect() {
   Serial.println("MQTT Connected!");
 }
 
-bool Milkcocoa::push(const char *topic, DataElement dataelement) {
+bool Milkcocoa::push(const char *path, DataElement dataelement) {
+  char topic[100];
+  sprintf(topic, "%s/%s/push", app_id, path);
   Adafruit_MQTT_Publish pushPublisher = Adafruit_MQTT_Publish(mqtt, topic);
   pushPublisher.publish(dataelement.toCharArray());
 }
 
-bool Milkcocoa::send(const char *topic, DataElement dataelement) {
+bool Milkcocoa::send(const char *path, DataElement dataelement) {
+  char topic[100];
+  sprintf(topic, "%s/%s/send", app_id, path);
+  Adafruit_MQTT_Publish pushPublisher = Adafruit_MQTT_Publish(mqtt, topic);
+  pushPublisher.publish(dataelement.toCharArray());
 }
 
 void Milkcocoa::loop() {
+  connect();
   Adafruit_MQTT_Subscribe *subscription;
   while ((subscription = mqtt->readSubscription(1000))) {
     for (uint8_t i=0; i<MILKCOCOA_SUBSCRIBERS; i++) {
+      if(milkcocoaSubscribers[i] == 0) continue;
       if (subscription == (milkcocoaSubscribers[i]->mqtt_sub) ) {
-        DataElement de = DataElement();
-        de.setValue("v", 1);
-        milkcocoaSubscribers[i]->cb((char *)milkcocoaSubscribers[i]->mqtt_sub->lastread);
+        DataElement de = DataElement((char *)milkcocoaSubscribers[i]->mqtt_sub->lastread);
+        milkcocoaSubscribers[i]->cb( de );
       }
     }
   }
 }
 
-bool Milkcocoa::on(const char *topic, GeneralFunction cb) {
+bool Milkcocoa::on(const char *path, const char *event, GeneralFunction cb) {
+  MilkcocoaSubscriber *sub = new MilkcocoaSubscriber(cb);
+  sprintf(sub->topic, "%s/%s/%s", app_id, path, event);
+
   uint8_t i;
-  MilkcocoaSubscriber *sub = new MilkcocoaSubscriber(new Adafruit_MQTT_Subscribe(mqtt, topic), cb);
+  Adafruit_MQTT_Subscribe *mqtt_sub = new Adafruit_MQTT_Subscribe(mqtt, sub->topic);
+  sub->set_mqtt_sub(mqtt_sub);
+  if(!mqtt->subscribe(mqtt_sub)) {
+    return false;
+  }
   for (i=0; i<MILKCOCOA_SUBSCRIBERS; i++) {
     if (milkcocoaSubscribers[i] == sub) {
       return false;
@@ -110,11 +128,12 @@ bool Milkcocoa::on(const char *topic, GeneralFunction cb) {
   }
 }
 
-MilkcocoaSubscriber::MilkcocoaSubscriber(Adafruit_MQTT_Subscribe *_mqtt_sub, GeneralFunction _cb) {
-  mqtt_sub = _mqtt_sub;
+MilkcocoaSubscriber::MilkcocoaSubscriber(GeneralFunction _cb) {
   cb = _cb;
 }
 
-
+void MilkcocoaSubscriber::set_mqtt_sub(Adafruit_MQTT_Subscribe *_mqtt_sub) {
+  mqtt_sub = _mqtt_sub;
+}
 
 

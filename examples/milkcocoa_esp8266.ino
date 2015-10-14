@@ -3,8 +3,8 @@
 
 /************************* WiFi Access Point *********************************/
 
-#define WLAN_SSID       "ssid"
-#define WLAN_PASS       "pass"
+#define WLAN_SSID       "...SSID..."
+#define WLAN_PASS       "...PASS..."
 
 
 /************************* Your Milkcocoa Setup *********************************/
@@ -51,19 +51,19 @@ void setup() {
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 
-  milkcocoa.connect();
-  milkcocoa.on("uniib1d489g/esp8266/push", onpush);
+  Serial.println( milkcocoa.on("esp8266", "push", onpush) );
 };
 
 void loop() {
   milkcocoa.loop();
   DataElement a = DataElement();
   a.setValue("v", 1);
-  milkcocoa.push("uniib1d489g/esp8266/push", a);
+  milkcocoa.push("esp8266", a);
   delay(5000);
 };
 
 void onpush(DataElement elem) {
+  Serial.println("onpush");
   Serial.println(elem.getInt("v"));
 };
 
