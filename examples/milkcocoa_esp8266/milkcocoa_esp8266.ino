@@ -9,7 +9,7 @@
 
 /************************* Your Milkcocoa Setup *********************************/
 
-#define MILKCOCOA_APP_ID      "uniib1d489g"
+#define MILKCOCOA_APP_ID      "...YOUR_MILKCOCOA_APP_ID..."
 #define MILKCOCOA_DATASTORE   "esp8266"
 
 /************* Milkcocoa Setup (you don't need to change this!) ******************/
@@ -29,7 +29,7 @@ Milkcocoa *milkcocoa;
 void setup() {
   Serial.begin(115200);
   delay(10);
-  
+
   milkcocoa = new Milkcocoa(&client, MQTT_SERVER, MILKCOCOA_SERVERPORT, MILKCOCOA_APP_ID, MQTT_CLIENTID, "sessionid");
 
   Serial.println(F("Adafruit MQTT demo"));
