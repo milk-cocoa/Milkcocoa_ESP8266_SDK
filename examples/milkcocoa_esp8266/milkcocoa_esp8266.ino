@@ -32,7 +32,7 @@ void setup() {
 
   milkcocoa = new Milkcocoa(&client, MQTT_SERVER, MILKCOCOA_SERVERPORT, MILKCOCOA_APP_ID, MQTT_CLIENTID, "sessionid");
 
-  Serial.println(F("Adafruit MQTT demo"));
+  Serial.println(F("Milkcocoa SDK demo"));
 
   // Connect to WiFi access point.
   Serial.println(); Serial.println();
