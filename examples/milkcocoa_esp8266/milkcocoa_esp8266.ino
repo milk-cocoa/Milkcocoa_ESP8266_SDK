@@ -22,15 +22,13 @@
 WiFiClient client;
 
 const char MQTT_SERVER[] PROGMEM    = MILKCOCOA_APP_ID ".mlkcca.com";
-const char MQTT_CLIENTID[] PROGMEM  = __TIME__ "client1";
+const char MQTT_CLIENTID[] PROGMEM  = __TIME__ MILKCOCOA_APP_ID;
 
-Milkcocoa *milkcocoa;
+Milkcocoa milkcocoa = Milkcocoa(&client, MQTT_SERVER, MILKCOCOA_SERVERPORT, MILKCOCOA_APP_ID, MQTT_CLIENTID);
 
 void setup() {
   Serial.begin(115200);
   delay(10);
-
-  milkcocoa = new Milkcocoa(&client, MQTT_SERVER, MILKCOCOA_SERVERPORT, MILKCOCOA_APP_ID, MQTT_CLIENTID, "sessionid");
 
   Serial.println(F("Milkcocoa SDK demo"));
 
@@ -50,14 +48,16 @@ void setup() {
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 
-  Serial.println( milkcocoa->on(MILKCOCOA_DATASTORE, "push", onpush) );
+  Serial.println( milkcocoa.on(MILKCOCOA_DATASTORE, "push", onpush) );
 };
 
 void loop() {
-  milkcocoa->loop();
-  DataElement a = DataElement();
-  a.setValue("v", 1);
-  milkcocoa->push(MILKCOCOA_DATASTORE, a);
+  milkcocoa.loop();
+
+  DataElement elem = DataElement();
+  elem.setValue("v", 1);
+
+  milkcocoa.push(MILKCOCOA_DATASTORE, elem);
   delay(5000);
 };
 

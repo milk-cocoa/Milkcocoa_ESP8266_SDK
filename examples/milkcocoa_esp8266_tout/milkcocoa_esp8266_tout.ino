@@ -25,15 +25,13 @@ extern "C" {
 WiFiClient client;
 
 const char MQTT_SERVER[] PROGMEM    = MILKCOCOA_APP_ID ".mlkcca.com";
-const char MQTT_CLIENTID[] PROGMEM  = __TIME__ "client1";
+const char MQTT_CLIENTID[] PROGMEM  = __TIME__ MILKCOCOA_APP_ID;
 
-Milkcocoa *milkcocoa;
+Milkcocoa milkcocoa = Milkcocoa(&client, MQTT_SERVER, MILKCOCOA_SERVERPORT, MILKCOCOA_APP_ID, MQTT_CLIENTID);
 
 void setup() {
   Serial.begin(115200);
   delay(10);
-
-  milkcocoa = new Milkcocoa(&client, MQTT_SERVER, MILKCOCOA_SERVERPORT, MILKCOCOA_APP_ID, MQTT_CLIENTID, "sessionid");
 
   Serial.println(F("Milkcocoa SDK demo"));
 
@@ -53,18 +51,18 @@ void setup() {
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 
-  Serial.println( milkcocoa->on(MILKCOCOA_DATASTORE, "push", onpush) );
+  Serial.println( milkcocoa.on(MILKCOCOA_DATASTORE, "push", onpush) );
 };
 
 void loop() {
-  milkcocoa->loop();
-  DataElement a = DataElement();
+  milkcocoa.loop();
+  DataElement elem = DataElement();
 
   uint ADC_Value = 0;
   ADC_Value = system_adc_read();
 
-  a.setValue("v", (int)ADC_Value);
-  milkcocoa->push(MILKCOCOA_DATASTORE, a);
+  elem.setValue("v", (int)ADC_Value);
+  milkcocoa.push(MILKCOCOA_DATASTORE, elem);
   delay(2000);
 };
 
