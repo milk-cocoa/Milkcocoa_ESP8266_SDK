@@ -11,8 +11,8 @@ Works with the ESP8266 Arduino platforms, and anything that supports Arduino's C
 Include library(`#include <Milkcocoa.h>`), and write a code like below.
 
 ```
-//client is Ethenet Client
-Milkcocoa milkcocoa = Milkcocoa(&client, MQTT_SERVER, MILKCOCOA_SERVERPORT, MILKCOCOA_APP_ID, MQTT_CLIENTID); 
+// 'client' is Ethenet/WiFi Client
+Milkcocoa milkcocoa = Milkcocoa(&client, (char)"milkcocoa_app_id.mlkcca.com", 1883, "milkcocoa_app_id", (char)"mqtt_client_id"); 
 
 void setup() {
  	//"on" API was able to call in setup
