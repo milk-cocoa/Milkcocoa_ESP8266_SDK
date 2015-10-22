@@ -58,7 +58,7 @@ void loop() {
   elem.setValue("v", 1);
 
   milkcocoa.push(MILKCOCOA_DATASTORE, elem);
-  delay(5000);
+  delay(7000);
 };
 
 void onpush(DataElement elem) {
