@@ -12,7 +12,7 @@ Include library(`#include <Milkcocoa.h>`), and write a code like below.
 
 ```
 // 'client' is Ethernet/WiFi Client
-Milkcocoa milkcocoa = Milkcocoa(&client, (char)"milkcocoa_app_id.mlkcca.com", 1883, "milkcocoa_app_id", (char)"mqtt_client_id"); 
+Milkcocoa milkcocoa = Milkcocoa(&client, "milkcocoa_app_id.mlkcca.com", 1883, "milkcocoa_app_id", "mqtt_client_id"); 
 
 void setup() {
  	//"on" API was able to call in setup
