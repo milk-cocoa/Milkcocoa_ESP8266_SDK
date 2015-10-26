@@ -59,14 +59,21 @@ Milkcocoa::Milkcocoa(Client *client, const char *host, uint16_t port, const char
 }
 
 Milkcocoa::Milkcocoa(Client *client, const char *host, uint16_t port, const char *_app_id, const char *client_id, const char *_session) {
+  sprintf(session, "%s", _session);
   app_id = _app_id;
-  sprintf(session, "s%s", _session);
   mqtt = new Adafruit_MQTT_Client(client, host, port, client_id, session, app_id);
 
   for (uint8_t i=0; i<MILKCOCOA_SUBSCRIBERS; i++) {
     milkcocoaSubscribers[i] = 0;
   }
 
+}
+
+Milkcocoa* Milkcocoa::createWithApiKey(Client *client, const char *host, uint16_t port, const char *app_id, const char *client_id, const char *key, const char *secret)
+{
+  char session[60];
+  sprintf(session, "k%s:%s", key, secret);
+  return new Milkcocoa(client, host, port, app_id, client_id, session);
 }
 
 void Milkcocoa::connect() {

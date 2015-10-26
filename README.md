@@ -41,6 +41,13 @@ void onpush(DataElement elem) {
 };
 ```
 
+## Using API Key
+
+
+```
+Milkcocoa *milkcocoa = Milkcocoa::createWithApiKey(&client, "milkcocoa_app_id.mlkcca.com", 1883, "milkcocoa_app_id", "mqtt_client_id", "API_KEY", "API_SECRET"); 
+```
+
 
 ## Examples
 
