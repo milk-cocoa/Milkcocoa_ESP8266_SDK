@@ -12,7 +12,7 @@ Include library(`#include <Milkcocoa.h>`), and write a code like below.
 
 ```
 // 'client' is Ethernet/WiFi Client
-Milkcocoa milkcocoa = Milkcocoa(&client, "milkcocoa_app_id.mlkcca.com", 1883, "milkcocoa_app_id", "mqtt_client_id"); 
+Milkcocoa milkcocoa = Milkcocoa(&client, "milkcocoa_app_id.mlkcca.com", 1883, "milkcocoa_app_id", "mqtt_client_id");
 
 void setup() {
  	//"on" API was able to call in setup
@@ -46,7 +46,7 @@ void onpush(DataElement elem) {
 If you use Milkcocoa API Key Authantication, please use `createWithApiKey`.
 
 ```
-Milkcocoa *milkcocoa = Milkcocoa::createWithApiKey(&client, "milkcocoa_app_id.mlkcca.com", 1883, "milkcocoa_app_id", "mqtt_client_id", "API_KEY", "API_SECRET"); 
+Milkcocoa *milkcocoa = Milkcocoa::createWithApiKey(&client, "milkcocoa_app_id.mlkcca.com", 1883, "milkcocoa_app_id", "mqtt_client_id", "API_KEY", "API_SECRET");
 ```
 
 
@@ -54,3 +54,4 @@ Milkcocoa *milkcocoa = Milkcocoa::createWithApiKey(&client, "milkcocoa_app_id.ml
 
 - [Simple ESP8266 Example](https://github.com/milk-cocoa/Milkcocoa_Arduino_SDK/blob/master/examples/milkcocoa_esp8266/milkcocoa_esp8266.ino): simple test of `push()` and `on("push")`.
 - [ESP8266 TOUT Example](https://github.com/milk-cocoa/Milkcocoa_Arduino_SDK/blob/master/examples/milkcocoa_esp8266_tout/milkcocoa_esp8266_tout.ino): get sensor data from TOUT of ESP8266
+- [ESP8266 API Key Authantication Example](https://github.com/milk-cocoa/Milkcocoa_Arduino_SDK/blob/master/examples/milkcocoa_esp8266_apikey_auth/milkcocoa_esp8266_apikey_auth.ino): auth with Milkcocoa API Key
