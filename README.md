@@ -68,3 +68,8 @@ MIT
 - Milkcocoa.h
 - Milkcocoa.cpp
 
+### Using
+
+- https://github.com/adafruit/Adafruit_MQTT_Library
+- https://github.com/interactive-matter/aJson
+
