@@ -61,5 +61,10 @@ Milkcocoa *milkcocoa = Milkcocoa::createWithApiKey(&client, "milkcocoa_app_id.ml
 
 MIT
 
-Adafruit IndustriesさんのCopyright以外の部分は、Copyright (c) 2015 Technical Rockstars.
+
+
+以下はCopyright (c) 2015 Technical Rockstars.
+
+- Milkcocoa.h
+- Milkcocoa.cpp
 
