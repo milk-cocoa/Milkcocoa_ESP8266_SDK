@@ -1,7 +1,7 @@
-Milkcocoa Arduino SDK
+Milkcocoa ESP8266 SDK
 =====
 
-[Milkcocoa](https://mlkcca.com/) SDK for Arduino & ESP8266.
+[Milkcocoa](https://mlkcca.com/) SDK working on [Arduino core for ESP8266](https://github.com/esp8266/Arduino).
 
 Works with the ESP8266 Arduino platforms, and anything that supports Arduino's Client interface.
 
