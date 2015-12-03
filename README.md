@@ -52,9 +52,9 @@ Milkcocoa *milkcocoa = Milkcocoa::createWithApiKey(&client, "milkcocoa_app_id.ml
 
 ## Examples
 
-- [Simple ESP8266 Example](https://github.com/milk-cocoa/Milkcocoa_Arduino_SDK/blob/master/examples/milkcocoa_esp8266/milkcocoa_esp8266.ino): simple test of `push()` and `on("push")`.
-- [ESP8266 TOUT Example](https://github.com/milk-cocoa/Milkcocoa_Arduino_SDK/blob/master/examples/milkcocoa_esp8266_tout/milkcocoa_esp8266_tout.ino): get sensor data from TOUT of ESP8266
-- [ESP8266 API Key Authantication Example](https://github.com/milk-cocoa/Milkcocoa_Arduino_SDK/blob/master/examples/milkcocoa_esp8266_apikey_auth/milkcocoa_esp8266_apikey_auth.ino): auth with Milkcocoa API Key
+- [Simple ESP8266 Example](https://github.com/milk-cocoa/Milkcocoa_ESP8266_SDK/blob/master/examples/milkcocoa_esp8266/milkcocoa_esp8266.ino): simple test of `push()` and `on("push")`.
+- [ESP8266 TOUT Example](https://github.com/milk-cocoa/Milkcocoa_ESP8266_SDK/blob/master/examples/milkcocoa_esp8266_tout/milkcocoa_esp8266_tout.ino): get sensor data from TOUT of ESP8266
+- [ESP8266 API Key Authantication Example](https://github.com/milk-cocoa/Milkcocoa_ESP8266_SDK/blob/master/examples/milkcocoa_esp8266_apikey_auth/milkcocoa_esp8266_apikey_auth.ino): auth with Milkcocoa API Key
 
 
 ## LICENSE
