@@ -59,12 +59,12 @@ void loop() {
   DataElement elem = DataElement();
   elem.setValue("v", 1);
 
-  milkcocoa->push(MILKCOCOA_DATASTORE, elem);
+  milkcocoa->push(MILKCOCOA_DATASTORE, &elem);
   delay(7000);
 };
 
-void onpush(DataElement elem) {
+void onpush(DataElement *elem) {
   Serial.println("onpush");
-  Serial.println(elem.getInt("v"));
+  Serial.println(elem->getInt("v"));
 };
 

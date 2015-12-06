@@ -27,14 +27,14 @@ void loop() {
 	DataElement elem = DataElement();
 	elem.setValue("name", "Milk");
 	elem.setValue("age", 35);
-	milkcocoa.push("milkcocoa_datastore_name", elem);
+	milkcocoa.push("milkcocoa_datastore_name", &elem);
 
 	delay(10000);
 }
 
-void onpush(DataElement elem) {
-  Serial.println(elem.getString("name"));
-  Serial.println(elem.getInt("age"));
+void onpush(DataElement *elem) {
+  Serial.println(elem->getString("name"));
+  Serial.println(elem->getInt("age"));
   // Output:
   // Milk
   // 35

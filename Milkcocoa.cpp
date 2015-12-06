@@ -2,7 +2,8 @@
 The MIT License (MIT)
 
 Copyright (c) 2015 Technical Rockstars
-
+Copyright (C) 2015 Embedded and Real-Time Systems Laboratory
+              Graduate School of Information Science, Nagoya Univ., JAPAN
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -25,14 +26,21 @@ SOFTWARE.
 #include "stdio.h"
 
 
-
 DataElement::DataElement() {
   params = aJson.createObject();
+  paJsonObj = aJson.createObject();
+  aJson.addItemToObject(paJsonObj, "params", params);
 }
 
 DataElement::DataElement(char *json_string) {
-  aJsonObject* obj = aJson.parse(json_string);
-  params = aJson.getObjectItem(obj, "params");
+  paJsonObj = aJson.parse(json_string);
+  params = aJson.getObjectItem(paJsonObj, "params");    
+}
+
+DataElement::~DataElement() {
+  aJson.deleteItem(paJsonObj);
+  paJsonObj = NULL;
+  params = NULL;    
 }
 
 void DataElement::setValue(const char *key, const char *v) {
@@ -66,9 +74,7 @@ float DataElement::getFloat(const char *key) {
 
 
 char *DataElement::toCharArray() {
-  aJsonObject *data = aJson.createObject();
-  aJson.addItemToObject(data, "params", params);
-  aJson.print(data);
+  return aJson.print(paJsonObj);
 }
 
 Milkcocoa::Milkcocoa(Client *client, const char *host, uint16_t port, const char *_app_id, const char *client_id) {
@@ -118,18 +124,28 @@ void Milkcocoa::connect() {
   Serial.println("MQTT Connected!");
 }
 
-bool Milkcocoa::push(const char *path, DataElement dataelement) {
+bool Milkcocoa::push(const char *path, DataElement *pdataelement) {
   char topic[100];
+  bool ret;
+  char *send_array;
   sprintf(topic, "%s/%s/push", app_id, path);
   Adafruit_MQTT_Publish pushPublisher = Adafruit_MQTT_Publish(mqtt, topic);
-  pushPublisher.publish(dataelement.toCharArray());
+  send_array = pdataelement->toCharArray();
+  ret = pushPublisher.publish(send_array);
+  free(send_array);
+  return ret;
 }
 
-bool Milkcocoa::send(const char *path, DataElement dataelement) {
+bool Milkcocoa::send(const char *path, DataElement *pdataelement) {
   char topic[100];
+  bool ret;
+  char *send_array;    
   sprintf(topic, "%s/%s/send", app_id, path);
   Adafruit_MQTT_Publish pushPublisher = Adafruit_MQTT_Publish(mqtt, topic);
-  pushPublisher.publish(dataelement.toCharArray());
+  send_array = pdataelement->toCharArray();
+  ret = pushPublisher.publish(send_array);
+  free(send_array);    
+  return ret;
 }
 
 void Milkcocoa::loop() {
@@ -139,8 +155,8 @@ void Milkcocoa::loop() {
     for (uint8_t i=0; i<MILKCOCOA_SUBSCRIBERS; i++) {
       if(milkcocoaSubscribers[i] == 0) continue;
       if (subscription == (milkcocoaSubscribers[i]->mqtt_sub) ) {
-        DataElement de = DataElement((char *)milkcocoaSubscribers[i]->mqtt_sub->lastread);
-        milkcocoaSubscribers[i]->cb( de );
+          DataElement de = DataElement((char *)milkcocoaSubscribers[i]->mqtt_sub->lastread);
+          milkcocoaSubscribers[i]->cb( &de );
       }
     }
   }
@@ -167,6 +183,7 @@ bool Milkcocoa::on(const char *path, const char *event, GeneralFunction cb) {
       return true;
     }
   }
+  return false;
 }
 
 MilkcocoaSubscriber::MilkcocoaSubscriber(GeneralFunction _cb) {
@@ -176,5 +193,4 @@ MilkcocoaSubscriber::MilkcocoaSubscriber(GeneralFunction _cb) {
 void MilkcocoaSubscriber::set_mqtt_sub(Adafruit_MQTT_Subscribe *_mqtt_sub) {
   mqtt_sub = _mqtt_sub;
 }
-
 
