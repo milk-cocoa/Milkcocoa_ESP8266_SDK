@@ -34,13 +34,13 @@ DataElement::DataElement() {
 
 DataElement::DataElement(char *json_string) {
   paJsonObj = aJson.parse(json_string);
-  params = aJson.getObjectItem(paJsonObj, "params");    
+  params = aJson.getObjectItem(paJsonObj, "params");
 }
 
 DataElement::~DataElement() {
   aJson.deleteItem(paJsonObj);
   paJsonObj = NULL;
-  params = NULL;    
+  params = NULL;
 }
 
 void DataElement::setValue(const char *key, const char *v) {
@@ -105,11 +105,12 @@ Milkcocoa* Milkcocoa::createWithApiKey(Client *client, const char *host, uint16_
   return new Milkcocoa(client, host, port, app_id, client_id, session);
 }
 
-void Milkcocoa::connect() {
+bool Milkcocoa::connect(uint16_t timeout) {
   int ret;
+  int cnt = 0;
 
   if (mqtt->connected()) {
-    return;
+    return true;
   }
 
   Serial.print("Connecting to MQTT... ");
@@ -120,8 +121,13 @@ void Milkcocoa::connect() {
        Serial.println("Retrying MQTT connection in 5 seconds...");
        mqtt->disconnect();
        delay(5000);  // wait 5 seconds
+       if(timeout > 0){
+         cnt++;
+         if(cnt*5000 >= timeout) return false;
+       }
   }
   Serial.println("MQTT Connected!");
+  return true;
 }
 
 bool Milkcocoa::push(const char *path, DataElement *pdataelement) {
@@ -139,17 +145,19 @@ bool Milkcocoa::push(const char *path, DataElement *pdataelement) {
 bool Milkcocoa::send(const char *path, DataElement *pdataelement) {
   char topic[100];
   bool ret;
-  char *send_array;    
+  char *send_array;
   sprintf(topic, "%s/%s/send", app_id, path);
   Adafruit_MQTT_Publish pushPublisher = Adafruit_MQTT_Publish(mqtt, topic);
   send_array = pdataelement->toCharArray();
   ret = pushPublisher.publish(send_array);
-  free(send_array);    
+  free(send_array);
   return ret;
 }
 
-void Milkcocoa::loop() {
-  connect();
+bool Milkcocoa::loop(uint16_t timeout) {
+  if(!connect(timeout)){
+    return false;
+  }
   Adafruit_MQTT_Subscribe *subscription;
   while ((subscription = mqtt->readSubscription(1000))) {
     for (uint8_t i=0; i<MILKCOCOA_SUBSCRIBERS; i++) {
@@ -160,6 +168,7 @@ void Milkcocoa::loop() {
       }
     }
   }
+  return true;
 }
 
 bool Milkcocoa::on(const char *path, const char *event, GeneralFunction cb) {
