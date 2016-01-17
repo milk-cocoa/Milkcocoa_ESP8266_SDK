@@ -44,7 +44,7 @@ class DataElement {
     char *getString(const char *key);
     int getInt(const char *key);
     float getFloat(const char *key);
-    
+
   private:
     aJsonObject *params;
     aJsonObject *paJsonObj;
@@ -66,8 +66,8 @@ class Milkcocoa {
   Milkcocoa(Client *client, const char *host, uint16_t port, const char *_app_id, const char *client_id);
   Milkcocoa(Client *client, const char *host, uint16_t port, const char *_app_id, const char *client_id, const char *_session);
   static Milkcocoa* createWithApiKey(Client *client, const char *host, uint16_t port, const char *app_id, const char *client_id, const char *key, const char *secret);
-  void connect();
-  void loop();
+  bool connect(uint16_t timeout);
+  bool loop(uint16_t timeout = 0);
   bool push(const char *path, DataElement *pdataelement);
   bool send(const char *path, DataElement *pdataelement);
   bool on(const char *path, const char *event, GeneralFunction cb);
