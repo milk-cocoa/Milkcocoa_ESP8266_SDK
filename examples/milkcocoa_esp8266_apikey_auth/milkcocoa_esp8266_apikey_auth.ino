@@ -28,6 +28,11 @@ const char MQTT_CLIENTID[] PROGMEM  = __TIME__ MILKCOCOA_APP_ID;
 
 Milkcocoa *milkcocoa = Milkcocoa::createWithApiKey(&client, MQTT_SERVER, MILKCOCOA_SERVERPORT, MILKCOCOA_APP_ID, MQTT_CLIENTID, MILKCOCOA_API_KEY, MILKCOCOA_API_SECRET);
 
+void onpush(DataElement *elem) {
+  Serial.println("onpush");
+  Serial.println(elem->getInt("v"));
+};
+
 void setup() {
   Serial.begin(115200);
   delay(10);
@@ -62,9 +67,3 @@ void loop() {
   milkcocoa->push(MILKCOCOA_DATASTORE, &elem);
   delay(7000);
 };
-
-void onpush(DataElement *elem) {
-  Serial.println("onpush");
-  Serial.println(elem->getInt("v"));
-};
-
