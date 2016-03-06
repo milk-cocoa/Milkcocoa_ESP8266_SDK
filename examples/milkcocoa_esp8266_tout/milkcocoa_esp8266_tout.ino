@@ -1,8 +1,5 @@
 #include <ESP8266WiFi.h>
 #include <Milkcocoa.h>
-extern "C" {
-#include "user_interface.h"
-}
 
 /************************* WiFi Access Point *********************************/
 
@@ -29,13 +26,12 @@ const char MQTT_CLIENTID[] PROGMEM  = __TIME__ MILKCOCOA_APP_ID;
 
 Milkcocoa milkcocoa = Milkcocoa(&client, MQTT_SERVER, MILKCOCOA_SERVERPORT, MILKCOCOA_APP_ID, MQTT_CLIENTID);
 
-void setup() {
-  Serial.begin(115200);
-  delay(10);
+void onpush(DataElement *elem) {
+  Serial.println("onpush");
+  Serial.println(elem->getInt("v"));
+};
 
-  Serial.println(F("Milkcocoa SDK demo"));
-
-  // Connect to WiFi access point.
+void setupWiFi() {
   Serial.println(); Serial.println();
   Serial.print("Connecting to ");
   Serial.println(WLAN_SSID);
@@ -50,23 +46,27 @@ void setup() {
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+}
+
+void setup() {
+  Serial.begin(115200);
+  delay(10);
+  Serial.println(F("Milkcocoa SDK demo"));
+
+  setupWiFi();
 
   Serial.println( milkcocoa.on(MILKCOCOA_DATASTORE, "push", onpush) );
 };
 
 void loop() {
   milkcocoa.loop();
+
+  int val = analogRead(A0);
+  Serial.println(String(val));
+
   DataElement elem = DataElement();
+  elem.setValue("v", val);
 
-  uint ADC_Value = 0;
-  ADC_Value = system_adc_read();
-
-  elem.setValue("v", (int)ADC_Value);
-  milkcocoa.push(MILKCOCOA_DATASTORE, elem);
+  milkcocoa.push(MILKCOCOA_DATASTORE, &elem);
   delay(7000);
-};
-
-void onpush(DataElement elem) {
-  Serial.println("onpush");
-  Serial.println(elem.getInt("v"));
 };
