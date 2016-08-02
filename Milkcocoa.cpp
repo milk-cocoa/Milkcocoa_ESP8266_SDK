@@ -154,6 +154,10 @@ bool Milkcocoa::send(const char *path, DataElement *pdataelement) {
   return ret;
 }
 
+void Milkcocoa::ping() {
+  mqtt->ping(5);
+}
+
 bool Milkcocoa::loop(uint16_t timeout) {
   if(!connect(timeout)){
     return false;
