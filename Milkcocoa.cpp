@@ -55,6 +55,10 @@ void DataElement::setValue(const char *key, double v) {
   aJson.addNumberToObject(params, key, v);
 }
 
+void DataElement::setId(const char *v) {
+  aJson.addStringToObject(paJsonObj, "id", v);
+}
+
 char *DataElement::getString(const char *key) {
   aJsonObject* obj = aJson.getObjectItem(params, key);
   return obj->valuestring;
@@ -135,6 +139,18 @@ bool Milkcocoa::push(const char *path, DataElement *pdataelement) {
   bool ret;
   char *send_array;
   sprintf(topic, "%s/%s/push", app_id, path);
+  Adafruit_MQTT_Publish pushPublisher = Adafruit_MQTT_Publish(mqtt, topic);
+  send_array = pdataelement->toCharArray();
+  ret = pushPublisher.publish(send_array);
+  free(send_array);
+  return ret;
+}
+
+bool Milkcocoa::set(const char *path, DataElement *pdataelement) {
+  char topic[100];
+  bool ret;
+  char *send_array;
+  sprintf(topic, "%s/%s/set", app_id, path);
   Adafruit_MQTT_Publish pushPublisher = Adafruit_MQTT_Publish(mqtt, topic);
   send_array = pdataelement->toCharArray();
   ret = pushPublisher.publish(send_array);

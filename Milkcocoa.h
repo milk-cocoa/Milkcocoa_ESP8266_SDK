@@ -40,6 +40,7 @@ class DataElement {
     void setValue(const char *key, const char *v);
     void setValue(const char *key, int v);
     void setValue(const char *key, double v);
+    void setId(const char *v);
     char *toCharArray();
     char *getString(const char *key);
     int getInt(const char *key);
@@ -69,6 +70,7 @@ class Milkcocoa {
   bool connect(uint16_t timeout = 0);
   bool loop(uint16_t timeout = 0);
   bool push(const char *path, DataElement *pdataelement);
+  bool set(const char *path, DataElement *pdataelement);
   bool send(const char *path, DataElement *pdataelement);
   bool on(const char *path, const char *event, GeneralFunction cb);
 
