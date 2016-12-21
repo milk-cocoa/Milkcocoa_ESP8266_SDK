@@ -68,6 +68,7 @@ class Milkcocoa {
   static Milkcocoa* createWithApiKey(Client *client, const char *host, uint16_t port, const char *app_id, const char *client_id, const char *key, const char *secret);
   bool connect(uint16_t timeout = 0);
   bool loop(uint16_t timeout = 0);
+  bool ping();
   bool push(const char *path, DataElement *pdataelement);
   bool send(const char *path, DataElement *pdataelement);
   bool on(const char *path, const char *event, GeneralFunction cb);
