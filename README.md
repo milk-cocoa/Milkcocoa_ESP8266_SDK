@@ -49,6 +49,32 @@ If you use Milkcocoa API Key Authantication, please use `createWithApiKey`.
 Milkcocoa *milkcocoa = Milkcocoa::createWithApiKey(&client, "milkcocoa_app_id.mlkcca.com", 1883, "milkcocoa_app_id", "mqtt_client_id", "API_KEY", "API_SECRET");
 ```
 
+### onメソッドでイベント監視だけ行う場合
+
+接続を維持するために、10秒から20秒間隔でpingを送信する必要があります。
+
+```
+void setup() {
+ 	//"on" API was able to call in setup
+	milkcocoa.on("milkcocoa_datastore_name", "push", onpush);
+}
+
+void loop() {
+	//milkcocoa.loop must be called in loop()
+	milkcocoa.loop();
+	milkcocoa.ping()
+	delay(10000);
+}
+
+void onpush(DataElement *elem) {
+  Serial.println(elem->getString("name"));
+  Serial.println(elem->getInt("age"));
+  // Output:
+  // Milk
+  // 35
+};
+
+```
 
 ## Examples
 
