@@ -130,6 +130,10 @@ bool Milkcocoa::connect(uint16_t timeout) {
   return true;
 }
 
+bool Milkcocoa::ping() {
+  return mqtt->ping(1); 
+}
+
 bool Milkcocoa::push(const char *path, DataElement *pdataelement) {
   char topic[100];
   bool ret;
