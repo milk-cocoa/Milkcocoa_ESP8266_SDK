@@ -28,7 +28,7 @@ SOFTWARE.
 #include "Client.h"
 #include "include/Adafruit/Adafruit_MQTT.h"
 #include "include/Adafruit/Adafruit_MQTT_Client.h"
-#include "include/aJson/aJson.h"
+#include "include/aJson/aJSON.h"
 
 #define MILKCOCOA_SUBSCRIBERS 8
 
